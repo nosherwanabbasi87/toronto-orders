@@ -14,7 +14,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
 
 # Authorize and open the sheet
 client = gspread.authorize(creds)
-sheet = client.open("Orders toronto py").worksheet("Orders")
+sheet = client.open("Orders toronto py").worksheet("Sheet1")
 
 @app.route('/')
 def home():
