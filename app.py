@@ -1,29 +1,18 @@
 from flask import Flask, jsonify
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
+
+# Google Sheets API setup
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+client = gspread.authorize(creds)
+sheet = client.open("Orders toronto py").worksheet("Orders")
 
 @app.route('/')
 def home():
     return jsonify({"status": "API running"})
-
-@app.route('/stats', methods=['GET'])
-def stats():
-    # For testing, return static values first
-    return jsonify({
-        "total_orders": 10,
-        "total_revenue": 5000,
-        "total_profit": 1500,
-        "average_order_value": 500
-    })
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-# Google Sheets API setup
-scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-client = gspread.authorize(creds)
-sheet = client.open("Orders toronto py").worksheet("Orders")
 
 @app.route('/stats', methods=['GET'])
 def stats():
@@ -41,6 +30,5 @@ def stats():
         "average_order_value": avg_order_value
     })
 
-@app.route('/')
-def home():
-    return jsonify({"status": "API running"})
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
