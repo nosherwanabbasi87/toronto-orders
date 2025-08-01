@@ -1,12 +1,18 @@
 from flask import Flask, jsonify
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import json, os
 
 app = Flask(__name__)
 
-# Google Sheets API setup
+# Google Sheets API scope
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+
+# Load credentials from Render environment variable
+creds_json = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
+
+# Authorize and open the sheet
 client = gspread.authorize(creds)
 sheet = client.open("Orders toronto py").worksheet("Orders")
 
