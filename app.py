@@ -6,19 +6,18 @@ app = Flask(__name__)
 def home():
     return jsonify({"status": "API running"})
 
-@app.route('/weekly-profit', methods=['GET'])
-def weekly_profit():
-    # Replace with your Google Sheets logic
-    total_profit = 1234.56
-    return jsonify({"weekly_profit": total_profit})
+@app.route('/stats', methods=['GET'])
+def stats():
+    # For testing, return static values first
+    return jsonify({
+        "total_orders": 10,
+        "total_revenue": 5000,
+        "total_profit": 1500,
+        "average_order_value": 500
+    })
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from flask import Flask, jsonify
-
-app = Flask(__name__)
 
 # Google Sheets API setup
 scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
